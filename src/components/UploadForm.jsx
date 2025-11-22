@@ -8,6 +8,7 @@ import {
   XCircle,
   AlertCircle,
 } from 'lucide-react';
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
 export default function UploadForm() {
   const [file, setFile] = useState(null);
@@ -22,8 +23,6 @@ export default function UploadForm() {
   };
 
   const submit = async () => {
-    const API_BASE = import.meta.env.VITE_API_URL || '';
-
     if (!file) return alert('Please upload a PDF.');
     if (rules.some((r) => !r.trim()))
       return alert('Please fill in all 3 rules.');
@@ -34,7 +33,7 @@ export default function UploadForm() {
 
     try {
       setLoading(true);
-      const resp = await axios.post(`${API_BASE}/api/check`, fd, {
+      const resp = await axios.post('/api/check', fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setResults(resp.data.results);
